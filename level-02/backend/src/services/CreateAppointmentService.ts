@@ -3,13 +3,14 @@ import { getCustomRepository } from 'typeorm'
 
 import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository'
+import AppError from '../errors/AppError';
 
-interface Request{
+interface Request {
   provider_id: string;
   date: Date;
 }
 
-class CreateAppointmentService{
+class CreateAppointmentService {
   public async execute({ provider_id, date }: Request): Promise<Appointment> {
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);
 
@@ -17,8 +18,8 @@ class CreateAppointmentService{
 
     const appointmentWithSameDate = await appointmentsRepository.findByDate(appointmentDate)
 
-    if(appointmentWithSameDate){
-      throw Error('This date is already booked and it is not available!')
+    if (appointmentWithSameDate) {
+      throw new AppError('This date is already booked and it is not available!', 401)
     }
 
     const appointment = appointmentsRepository.create({
