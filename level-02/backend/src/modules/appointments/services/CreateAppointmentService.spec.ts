@@ -16,7 +16,7 @@ describe('CreateAppointment', () => {
     });
 
     expect(appointment).toHaveProperty('id');
-    expect(appointment?.provider.id).toBe('123123');
+    expect(appointment?.provider_id).toBe('123123');
   });
 });
 
