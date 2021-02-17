@@ -11,7 +11,7 @@ describe('CreateUserService', () => {
       email: 'mail@example.com',
       password: '123456'
     })
-    console.log(user)
+
     expect(user).toHaveProperty('id')
   })
 })
