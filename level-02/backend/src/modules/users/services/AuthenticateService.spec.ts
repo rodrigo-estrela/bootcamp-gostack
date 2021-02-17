@@ -4,7 +4,7 @@ import AuthenticateService from "./AuthenticateService"
 import CreateUserService from './CreateUserService'
 
 describe('AuthenticateService', () => {
-  it('should be able to create a new user', async () => {
+  it('should be able to authenticate a user when valid data is provided', async () => {
     const fakeUsersRepository = new FakeUsersRepository()
     const fakeHashProvider = new FakeHashProvider()
     const createUserService = new CreateUserService(fakeUsersRepository, fakeHashProvider)
