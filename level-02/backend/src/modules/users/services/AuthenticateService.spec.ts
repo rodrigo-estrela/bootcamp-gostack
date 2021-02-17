@@ -1,3 +1,4 @@
+import FakeHashProvider from "../providers/HashProvider/fakes/FakeHashProvider"
 import FakeUsersRepository from "../repositories/fakes/FakeUsersRepository"
 import AuthenticateService from "./AuthenticateService"
 import CreateUserService from './CreateUserService'
@@ -5,7 +6,8 @@ import CreateUserService from './CreateUserService'
 describe('AuthenticateService', () => {
   it('should be able to create a new user', async () => {
     const fakeUsersRepository = new FakeUsersRepository()
-    const createUserService = new CreateUserService(fakeUsersRepository)
+    const fakeHashProvider = new FakeHashProvider()
+    const createUserService = new CreateUserService(fakeUsersRepository, fakeHashProvider)
 
     await createUserService.execute({
       name: 'any_name',
@@ -13,7 +15,7 @@ describe('AuthenticateService', () => {
       password: '123456'
     })
 
-    const auth = new AuthenticateService(fakeUsersRepository)
+    const auth = new AuthenticateService(fakeUsersRepository, fakeHashProvider)
 
     const response = await auth.execute({
       email: 'mail@example.com',

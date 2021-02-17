@@ -6,6 +6,7 @@ import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import { inject, injectable } from 'tsyringe';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 interface Request {
   email: string,
@@ -19,19 +20,22 @@ interface Response {
 
 @injectable()
 class AuthenticateService {
-  constructor(
+  constructor (
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) { }
 
-  public async execute({ email, password }: Request): Promise<Response> {
+  public async execute ({ email, password }: Request): Promise<Response> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Invalide email/password combination', 401);
     }
 
-    const comparedPassword = await compare(password, user.password);
+    const comparedPassword = await this.hashProvider.compareHash(password, user.password);
 
     if (!comparedPassword) {
       throw new AppError('Invalide email/password combination', 401);
