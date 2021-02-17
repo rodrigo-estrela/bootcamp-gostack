@@ -43,6 +43,8 @@ describe('AuthenticateService', () => {
     })).rejects.toBeInstanceOf(AppError)
   })
 
+
+
   it('should not be able to authenticate a user when invalid data is provided', async () => {
     const fakeUsersRepository = new FakeUsersRepository()
     const fakeHashProvider = new FakeHashProvider()
@@ -56,11 +58,10 @@ describe('AuthenticateService', () => {
 
     const auth = new AuthenticateService(fakeUsersRepository, fakeHashProvider)
 
-    const response = await auth.execute({
+
+    expect(auth.execute({
       email: 'mail@example.com',
       password: 'wrong_password'
-    })
-
-    expect(response).toHaveProperty('token')
+    })).rejects.toBeInstanceOf(AppError)
   })
 })
